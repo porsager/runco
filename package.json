@@ -1,6 +1,6 @@
 {
   "name": "runco",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Run npm run scripts in parallel",
   "bin": "runco",
   "keywords": [

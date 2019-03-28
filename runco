@@ -5,7 +5,15 @@ const path = require('path')
     , fs = require('fs')
     , pkg = require(path.join(process.cwd(), 'package.json'))
 
-loadEnv()
+process.on('SIGINT', () => { /* noop */ })
+
+const dotenv = path.join(process.cwd(), '.env')
+
+fs.existsSync(dotenv) && fs.readFileSync(dotenv, 'utf8').split('\n').map(l =>
+  l.trim().match(/([a-z_-]*)=(.*)/i)
+).filter(m => m).forEach(([_, key, value]) => {
+  process.env[key] = value
+})
 
 const scripts = process.argv.slice(2)
 
@@ -19,16 +27,3 @@ Object.keys(pkg.scripts)
   .filter(s => scripts.some(match => matches(match, s)))
   .map(s => pkg.scripts[s].split(' '))
   .map(cmd => cp.spawn(cmd[0], cmd.slice(1), { stdio: 'inherit' }))
-
-function loadEnv() {
-  const dotenv = path.join(process.cwd(), '.env')
-
-  if (!fs.existsSync(dotenv))
-    return
-
-  fs.readFileSync(dotenv, 'utf8').split('\n').map(l =>
-    l.trim().match(/([a-z_-]*)=(.*)/i)
-  ).filter(m => m).forEach(([_, key, value]) => {
-    process.env[key] = value
-  })
-}
