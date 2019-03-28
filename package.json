@@ -1,8 +1,17 @@
 {
   "name": "runco",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Run npm run scripts in parallel",
   "bin": "runco",
+  "keywords": [
+    "concurrent",
+    "parallel",
+    "npm run",
+    "run",
+    "scripts",
+    "dotenv",
+    "env"
+  ],
   "author": "Rasmus Porsager <rasmus@porsager.com>",
   "repository": "porsager/runco",
   "license": "WTFPL"

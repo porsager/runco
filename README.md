@@ -4,7 +4,9 @@
 
 A very simple no dependencies way to run multiple npm scripts in parallel / concurrently.
 
-It supports wildcards and loads environment variables from your `.env` files automatically.
+It supports tail wildcards and loads environment variables from `.env` files automatically.
+
+It also allows child processes to gracefully exit on SIGINT which helps when testing things that need a shutdown procedure.
 
 ## Example
 
