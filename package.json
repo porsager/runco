@@ -1,0 +1,9 @@
+{
+  "name": "runco",
+  "version": "1.0.0",
+  "description": "Run npm run scripts in parallel",
+  "bin": "runco",
+  "author": "Rasmus Porsager <rasmus@porsager.com>",
+  "repository": "porsager/runco",
+  "license": "WTFPL"
+}

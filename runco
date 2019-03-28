@@ -1,0 +1,34 @@
+#!/usr/bin/env node
+
+const path = require('path')
+    , cp = require('child_process')
+    , fs = require('fs')
+    , pkg = require(path.join(process.cwd(), 'package.json'))
+
+loadEnv()
+
+const scripts = process.argv.slice(2)
+
+const matches = (
+  match,
+  x,
+  wild = match.slice(0, match.indexOf('*'))
+) => x === match || wild === x.slice(0, wild.length)
+
+Object.keys(pkg.scripts)
+  .filter(s => scripts.some(match => matches(match, s)))
+  .map(s => pkg.scripts[s].split(' '))
+  .map(cmd => cp.spawn(cmd[0], cmd.slice(1), { stdio: 'inherit' }))
+
+function loadEnv() {
+  const dotenv = path.join(process.cwd(), '.env')
+
+  if (!fs.existsSync(dotenv))
+    return
+
+  fs.readFileSync(dotenv, 'utf8').split('\n').map(l =>
+    l.trim().match(/([a-z_-]*)=(.*)/i)
+  ).filter(m => m).forEach(([_, key, value]) => {
+    process.env[key] = value
+  })
+}
