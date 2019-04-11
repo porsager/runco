@@ -1,7 +1,7 @@
 {
   "name": "runco",
-  "version": "1.0.3",
-  "description": "Run npm run scripts in parallel",
+  "version": "2.0.0",
+  "description": "Run npm run scripts in parallel and autoload .env",
   "bin": "runco",
   "main": "runco",
   "keywords": [
