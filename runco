@@ -7,15 +7,15 @@ const path = require('path')
 
 process.on('SIGINT', () => { /* noop */ })
 
-const dotenv = path.join(process.cwd(), '.env')
+const dotenv = resolveEnv(process.argv[1] || '.env')
 
-fs.existsSync(dotenv) && fs.readFileSync(dotenv, 'utf8').split('\n').map(l =>
+dotenv && fs.readFileSync(dotenv, 'utf8').split('\n').map(l =>
   l.trim().match(/([a-z_-]*)=(.*)/i)
 ).filter(m => m).forEach(([_, key, value]) => {
   process.env[key] = value
 })
 
-const scripts = process.argv.slice(2)
+const args = process.argv.slice(2)
 
 const matches = (
   match,
@@ -24,6 +24,13 @@ const matches = (
 ) => x === match || wild === x.slice(0, wild.length)
 
 Object.keys(pkg.scripts)
-  .filter(s => scripts.some(match => matches(match, s)))
+  .filter(s => args.some(match => matches(match, s)))
   .map(s => pkg.scripts[s].split(' '))
   .map(cmd => cp.spawn(cmd[0], cmd.slice(1), { stdio: 'inherit' }))
+
+function resolveEnv(p) {
+  const envPath = path.join(path.dirname(p), '.env')
+  return fs.existsSync(envPath)
+    ? envPath
+    : resolveEnv(path.dirname(p))
+}
